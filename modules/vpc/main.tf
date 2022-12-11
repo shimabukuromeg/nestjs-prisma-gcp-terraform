@@ -3,6 +3,11 @@ resource "google_project_service" "vpcaccess-api" {
   service = "vpcaccess.googleapis.com"
 }
 
+resource "google_project_service" "network" {
+  project = var.project_id
+  service = "servicenetworking.googleapis.com"
+}
+
 # VPCアクセスコネクター
 resource "google_vpc_access_connector" "connector" {
   provider = google-beta
@@ -50,4 +55,7 @@ resource "google_service_networking_connection" "default" {
   network                 = google_compute_network.peering_network.id
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_ip_alloc.name]
+  depends_on = [
+    google_project_service.network
+  ]
 }

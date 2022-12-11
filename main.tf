@@ -17,3 +17,14 @@ module "vpc" {
   project_id = var.project_id
   region     = var.region
 }
+
+module "cloud_sql" {
+  source        = "./modules/cloud_sql"
+  project_id    = var.project_id
+  region        = var.region
+  db-network-id = module.vpc.vpc_id
+
+  depends_on = [
+    module.vpc
+  ]
+}
