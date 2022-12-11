@@ -12,4 +12,8 @@ module "artifact_registry" {
   repository_id = "my-repo"
 }
 
-
+module "vpc" {
+  source     = "./modules/vpc"
+  project_id = var.project_id
+  region     = var.region
+}
