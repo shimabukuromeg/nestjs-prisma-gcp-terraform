@@ -4,9 +4,12 @@ provider "google" {
   zone    = var.zone
 }
 
-resource "google_compute_network" "peering_network" {
-  name                    = "private-network"
-  auto_create_subnetworks = "false"
-  project                 = var.project_id
+# Artifact Registry
+module "artifact_registry" {
+  source        = "./modules/artifact_registry"
+  project_id    = var.project_id
+  location      = var.region
+  repository_id = "my-repo"
 }
+
 
