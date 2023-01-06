@@ -5,10 +5,11 @@ resource "random_id" "db_name_suffix" {
 }
 
 resource "google_sql_database_instance" "instance" {
-  project          = var.project_id
-  name             = "private-instance-${random_id.db_name_suffix.hex}"
-  region           = var.region
-  database_version = var.db-version
+  project             = var.project_id
+  name                = "private-instance-${random_id.db_name_suffix.hex}"
+  region              = var.region
+  database_version    = var.db-version
+  deletion_protection = false
 
   settings {
     tier = "db-f1-micro"
