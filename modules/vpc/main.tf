@@ -8,7 +8,8 @@ resource "google_project_service" "network" {
   service = "servicenetworking.googleapis.com"
 }
 
-# VPCアクセスコネクター
+# サーバーレス VPC アクセス
+# https://cloud.google.com/vpc/docs/serverless-vpc-access?hl=ja
 resource "google_vpc_access_connector" "connector" {
   provider = google-beta
   project  = var.project_id
