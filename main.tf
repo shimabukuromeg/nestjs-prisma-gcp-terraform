@@ -37,7 +37,7 @@ module "workload_identity" {
   source     = "./modules/workload_identity"
   project_id = var.project_id
   region     = var.region
-  pool_id    = "my-pool-${random_id.pool_id_suffix.hex}}"
+  pool_id    = "my-pool-${random_id.pool_id_suffix.hex}"
 }
 
 module "iam" {
