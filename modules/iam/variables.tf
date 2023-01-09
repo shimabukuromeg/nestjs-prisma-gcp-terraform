@@ -7,11 +7,12 @@ variable "project_id" {
 
 variable "region" {
   description = "リージョン"
+  default     = "asia-northeast1"
   type        = string
 }
 
-variable "zone" {
-  description = "ゾーン"
+variable "pool_id" {
+  description = "プールID"
   type        = string
 }
 
