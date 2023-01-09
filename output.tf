@@ -4,7 +4,7 @@ output "vpc-serverless-connector" {
 }
 
 output "cloudsql-conn-name" {
-  value       = module.cloud_sql.db-connection-name
+  value       = module.cloud_sql.db_connection_name
   description = "CloudSQL接続名"
 }
 
