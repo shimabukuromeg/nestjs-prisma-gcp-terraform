@@ -50,3 +50,13 @@ resource "google_cloud_run_service" "api" {
     ]
   }
 }
+
+# Publicからのアクセスを許可
+resource "google_cloud_run_service_iam_member" "public_access" {
+  provider = google-beta
+  service  = google_cloud_run_service.api.name
+  location = google_cloud_run_service.api.location
+  project  = google_cloud_run_service.api.project
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
