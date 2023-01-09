@@ -44,7 +44,7 @@ module "iam" {
   source     = "./modules/iam"
   project_id = var.project_id
   region     = var.region
-  pool_id    = module.workload_identity.workload_identity_provider_pool.id
+  pool_id    = module.workload_identity.workload_identity_provider_pool.name
   repository = var.repository
 
   depends_on = [
