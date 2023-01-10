@@ -1,11 +1,13 @@
 resource "google_project_service" "vpcaccess-api" {
-  project = var.project_id # Replace this with your project ID in quotes
-  service = "vpcaccess.googleapis.com"
+  project                    = var.project_id # Replace this with your project ID in quotes
+  service                    = "vpcaccess.googleapis.com"
+  disable_dependent_services = true
 }
 
 resource "google_project_service" "network" {
-  project = var.project_id
-  service = "servicenetworking.googleapis.com"
+  project                    = var.project_id
+  service                    = "servicenetworking.googleapis.com"
+  disable_dependent_services = true
 }
 
 # サーバーレス VPC アクセス
@@ -21,7 +23,9 @@ resource "google_vpc_access_connector" "connector" {
   machine_type = "e2-micro"
 
   depends_on = [
-    google_project_service.vpcaccess-api
+    google_project_service.vpcaccess-api,
+    google_project_service.network,
+    google_compute_subnetwork.custom_test,
   ]
 }
 
@@ -31,6 +35,12 @@ resource "google_compute_subnetwork" "custom_test" {
   ip_cidr_range = "10.2.0.0/28"
   region        = var.region
   network       = google_compute_network.peering_network.id
+
+  depends_on = [
+    google_project_service.vpcaccess-api,
+    google_project_service.network,
+    google_compute_network.peering_network,
+  ]
 }
 
 # VPC
@@ -49,6 +59,12 @@ resource "google_compute_global_address" "private_ip_alloc" {
   address_type  = "INTERNAL"
   prefix_length = 16
   network       = google_compute_network.peering_network.id
+
+  depends_on = [
+    google_project_service.vpcaccess-api,
+    google_project_service.network,
+    google_compute_network.peering_network,
+  ]
 }
 
 # Create a private connection
@@ -56,7 +72,9 @@ resource "google_service_networking_connection" "default" {
   network                 = google_compute_network.peering_network.id
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_ip_alloc.name]
+
   depends_on = [
-    google_project_service.network
+    google_project_service.network,
+    google_compute_network.peering_network,
   ]
 }
