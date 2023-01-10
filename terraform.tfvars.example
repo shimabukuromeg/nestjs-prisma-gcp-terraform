@@ -1,0 +1,4 @@
+project_id = "プロジェクトID"
+region     = "asia-northeast1"
+zone       = "asia-northeast1-a"
+repository = "リポジトリ名"
