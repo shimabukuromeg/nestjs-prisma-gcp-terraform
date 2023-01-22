@@ -10,7 +10,8 @@ locals {
     "vpcaccess.googleapis.com",
     "iamcredentials.googleapis.com",
     "artifactregistry.googleapis.com",
-    "compute.googleapis.com"
+    "compute.googleapis.com",
+    "secretmanager.googleapis.com",
   ])
 }
 
