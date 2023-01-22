@@ -78,7 +78,7 @@ module "cloud_run" {
   region                  = var.region
   vpc_access_connector_id = module.vpc.vpc_access_connector_id
   db_connection_name      = module.cloud_sql.db_connection_name
-  service_account_name    = module.iam.service_account_name
+  service_account_name    = module.iam.cloud_run_sa_service_account_name
 
   depends_on = [
     module.iam,
