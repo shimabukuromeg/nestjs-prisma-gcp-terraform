@@ -1,9 +1,3 @@
-# APIの有効化
-resource "google_project_service" "iamcredentials" {
-  service                    = "iamcredentials.googleapis.com"
-  disable_dependent_services = true
-}
-
 ######################
 ## デプロイ用SA
 ######################

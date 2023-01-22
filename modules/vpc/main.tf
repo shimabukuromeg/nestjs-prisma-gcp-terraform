@@ -1,15 +1,3 @@
-resource "google_project_service" "vpcaccess-api" {
-  project                    = var.project_id # Replace this with your project ID in quotes
-  service                    = "vpcaccess.googleapis.com"
-  disable_dependent_services = true
-}
-
-resource "google_project_service" "network" {
-  project                    = var.project_id
-  service                    = "servicenetworking.googleapis.com"
-  disable_dependent_services = true
-}
-
 # サーバーレス VPC アクセス
 # https://cloud.google.com/vpc/docs/serverless-vpc-access?hl=ja
 resource "google_vpc_access_connector" "connector" {
@@ -23,8 +11,6 @@ resource "google_vpc_access_connector" "connector" {
   machine_type = "e2-micro"
 
   depends_on = [
-    google_project_service.vpcaccess-api,
-    google_project_service.network,
     google_compute_subnetwork.custom_test,
   ]
 }
@@ -37,8 +23,6 @@ resource "google_compute_subnetwork" "custom_test" {
   network       = google_compute_network.peering_network.id
 
   depends_on = [
-    google_project_service.vpcaccess-api,
-    google_project_service.network,
     google_compute_network.peering_network,
   ]
 }
@@ -61,8 +45,6 @@ resource "google_compute_global_address" "private_ip_alloc" {
   network       = google_compute_network.peering_network.id
 
   depends_on = [
-    google_project_service.vpcaccess-api,
-    google_project_service.network,
     google_compute_network.peering_network,
   ]
 }
@@ -74,7 +56,6 @@ resource "google_service_networking_connection" "default" {
   reserved_peering_ranges = [google_compute_global_address.private_ip_alloc.name]
 
   depends_on = [
-    google_project_service.network,
     google_compute_network.peering_network,
   ]
 }

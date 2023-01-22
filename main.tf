@@ -4,18 +4,32 @@ provider "google" {
   zone    = var.zone
 }
 
+# APIの有効化
+module "service" {
+  source     = "./modules/service"
+  project_id = var.project_id
+}
+
 # Artifact Registry
 module "artifact_registry" {
   source        = "./modules/artifact_registry"
   project_id    = var.project_id
   location      = var.region
   repository_id = "my-repo"
+
+  depends_on = [
+    module.service
+  ]
 }
 
 module "vpc" {
   source     = "./modules/vpc"
   project_id = var.project_id
   region     = var.region
+
+  depends_on = [
+    module.service
+  ]
 }
 
 module "cloud_sql" {
@@ -25,7 +39,8 @@ module "cloud_sql" {
   db-network-id = module.vpc.vpc_id
 
   depends_on = [
-    module.vpc
+    module.vpc,
+    module.service
   ]
 }
 
@@ -38,6 +53,10 @@ module "workload_identity" {
   project_id = var.project_id
   region     = var.region
   pool_id    = "my-pool-${random_id.pool_id_suffix.hex}"
+
+  depends_on = [
+    module.service
+  ]
 }
 
 module "iam" {
@@ -48,7 +67,8 @@ module "iam" {
   repository = var.repository
 
   depends_on = [
-    module.workload_identity
+    module.workload_identity,
+    module.service
   ]
 }
 
@@ -61,6 +81,7 @@ module "cloud_run" {
   service_account_name    = module.iam.service_account_name
 
   depends_on = [
-    module.iam
+    module.iam,
+    module.service
   ]
 }
